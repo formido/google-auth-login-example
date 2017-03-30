@@ -1,4 +1,4 @@
-Google Auth Login Example
+Elixir/JavaScript Google Auth Login Example
 -------------------------
 
 An Elixir/JavaScript example or template to quickly bootstrap an OAuth
