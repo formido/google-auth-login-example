@@ -20,4 +20,4 @@ Round trip until it makes sense. ;)
 2. `cd google-auth-login-example`
 3. `mix deps.get`
 4. `iex -S mix`
-5. Run `curl localhost:4001` from another shell.
+5. Visit `localhost:4001` from a browser.
