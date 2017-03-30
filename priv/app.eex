@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8">
+    <title>Sample FirebaseUI App</title>
+    <script
+       src="https://code.jquery.com/jquery-3.2.1.js"
+       integrity="sha256-DZAnKJ/6XZ9si04Hgrsxu/8s717jcIzLy3oi35EouyE="
+       crossorigin="anonymous"></script>
+    <!-- *******************************************************************************************
+       * TODO(DEVELOPER): Paste the initialization snippet from:
+       * Firebase Console > Overview > Add Firebase to your web app. *
+       ***************************************************************************************** -->
+    <script src="https://cdn.firebase.com/libs/firebaseui/1.0.0/firebaseui.js"></script>
+    <link type="text/css" rel="stylesheet" href="https://cdn.firebase.com/libs/firebaseui/1.0.0/firebaseui.css">
+    <script type="text/javascript">
+      // FirebaseUI config.
+      var uiConfig = {
+        signInSuccessUrl: '/',
+        signInOptions: [
+          // Leave the lines as is for the providers you want to offer your users.
+          firebase.auth.GoogleAuthProvider.PROVIDER_ID,
+        ],
+        // Terms of service url.
+        tosUrl: '<your-tos-url>'
+      };
+
+      // Initialize the FirebaseUI Widget using Firebase.
+      var ui = new firebaseui.auth.AuthUI(firebase.auth());
+      // The start method will wait until the DOM is loaded.
+      ui.start('#firebaseui-auth-container', uiConfig);
+    </script>
+    <script type="text/javascript">
+      initApp = function() {
+        firebase.auth().onAuthStateChanged(function(user) {
+          if (user) {
+            firebase.auth().currentUser.getToken(/* forceRefresh */ true).then(function(idToken) {
+              $.post('validate-token', idToken, function(response) {
+                console.log(response);
+                $('#logout').css('display', 'block');
+                return;
+              }, 'json'
+            )})
+         } else {
+           $('#logout').css('display', 'none');
+           $('#firebaseui-auth-container').css('display', 'block');
+         }
+      })};
+      window.addEventListener('load', function() {
+        initApp();
+        $('#logout').click(function() {
+          firebase.auth().signOut().then(function() {
+            console.log("signed out");
+          }).catch(function(error) {
+            console.log("sign out failed");
+          });
+        });
+      });
+    </script>
+  </head>
+  <body>
+    <div id="logout" style="display: none;"><button>Sign out</button></div>
+    <div id="firebaseui-auth-container" style="display: none;"></div>
+  </body>
+</html>
